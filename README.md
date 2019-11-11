@@ -1,34 +1,35 @@
-# Starter Project 
-## p5.js with Typescript
-Project to quickly get something working in [p5.js](https://p5js.org/) and [typescript](https://www.typescriptlang.org/)
+# Starter Template
+## p5.js with TypeScript
+This starter template will quickly get you started with working in both [p5.js](https://p5js.org/) and
+[TypeScript](https://www.typescriptlang.org). If you have chosen to do the Data Visualiser project, the JS files from
+the original template have already been converted to strict TypeScript for you here. The original JS files are available
+in the `js-orig-template` directory for reference purposes.
 
 ## Getting Started
 
-### Installing
+### Setup
+* [Install Node.js](https://nodejs.org/en/download)
+* Install TypeScript and TSLint by running `npm install -g typescript tslint` in a terminal
+* [Install Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+* Download the project: `git clone https://github.com/eicksl/p5-typescript-starter.git`
+* Move into the project directory: `cd p5-typescript-starter`
+* Run `npm install`
 
-```
-git clone https://github.com/Gaweph/p5-typescript-starter.git
-```
-```
-npm install
-```
+From now on, you can just run `npm start` from the project's root directory.
 
 ### Usage
+```
+npm test
+```
+This does one or more things. First it will compile all .ts files in the `sketch` directory. If there are no compilation
+errors, it will convert everything to a single, readable JS file called `build.js` within the `build` directory (all
+code comments will be preserved). If everything was successful, it will then run TSLint to check for linting errors.
 
 ```
 npm start
 ```
-A local version will now be running on [localhost:3000](http://localhost:3000)
-
-## Demo
-
-A demo of the default sketch can be found here:
-
-[p5-typescript-starter](https://gaweph.github.io/p5-typescript-starter/)
-
-![Demo](p5-typescript-demo.gif?raw=true "Demo")
-
-this is based on the [morph](https://processing.org/examples/morph.html) sketch available in the p5js examples
+This will compile and run the project locally. You can access it at http://localhost:3000 As you make changes to TypeScript files,
+the code will automatically recompile and the changes will update in the browser.
 
 ## Global and Instanced mode
 P5 is able to run in either global or instanced mode.
@@ -39,11 +40,9 @@ This starter project now uses **Global mode** to bring it inline with most of th
 As stated on the P5 wiki:
 > While this is convenient (and friendlier) it's important to note that this can lead to problems and confusion down the road when mixing other JS libraries or trying to embed multiple p5 sketches on the same page. A safer, more advanced methodology is to create a p5 sketch as an object "instance".
 
-The following examples are both functionaly the same.
-
+The following examples are both functionally the same.
 
 ### Global Mode
-
 ``` typescript
 let x = 100;
 let y = 100;
