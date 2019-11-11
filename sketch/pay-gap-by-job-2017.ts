@@ -1,4 +1,4 @@
-function PayGapByJob2017() {
+function PayGapByJob2017(this: any) {
 	// Name for the visualisation to appear in the menu bar.
 	this.name = 'Pay gap by job: 2017';
 
@@ -17,22 +17,24 @@ function PayGapByJob2017() {
 	// Preload the data. This function is called automatically by the
 	// gallery when a visualisation is added.
 	this.preload = function() {
-		var self = this;
+		const self = this;
 		this.data = loadTable(
 		// @ts-ignore
 		'./data/pay-gap/occupation-hourly-pay-by-gender-2017.csv', 'csv', 'header',
 		// Callback function to set the value
 		// this.loaded to true.
-		function(table) {
+			() => {
 			self.loaded = true;
 		});
 
 	};
 
-	this.setup = function() {
+	this.setup = () => {
+		// not implemented
 	};
 
-	this.destroy = function() {
+	this.destroy = () => {
+		// not implemented
 	};
 
 	this.draw = function() {
@@ -45,10 +47,10 @@ function PayGapByJob2017() {
 		this.addAxes();
 
 		// Get data from the table object.
-		var jobs = this.data.getColumn('job_subtype');
-		var propFemale = this.data.getColumn('proportion_female');
-		var payGap = this.data.getColumn('pay_gap');
-		var numJobs = this.data.getColumn('num_jobs');
+		const jobs = this.data.getColumn('job_subtype');
+		let propFemale = this.data.getColumn('proportion_female');
+		let payGap = this.data.getColumn('pay_gap');
+		let numJobs = this.data.getColumn('num_jobs');
 
 		// Convert numerical data from strings to numbers.
 		propFemale = stringsToNumbers(propFemale);
@@ -58,20 +60,20 @@ function PayGapByJob2017() {
 		// Set ranges for axes.
 		//
 		// Use full 100% for x-axis (proportion of women in roles).
-		var propFemaleMin = 0;
-		var propFemaleMax = 100;
+		const propFemaleMin = 0;
+		const propFemaleMax = 100;
 
 		// For y-axis (pay gap) use a symmetrical axis equal to the
 		// largest gap direction so that equal pay (0% pay gap) is in the
 		// centre of the canvas. Above the line means men are paid
 		// more. Below the line means women are paid more.
-		var payGapMin = -20;
-		var payGapMax = 20;
+		const payGapMin = -20;
+		const payGapMax = 20;
 
 		// Find smallest and largest numbers of people across all
 		// categories to scale the size of the dots.
-		var numJobsMin = min(numJobs);
-		var numJobsMax = max(numJobs);
+		const numJobsMin = min(numJobs);
+		const numJobsMax = max(numJobs);
 
 		fill(255);
 		stroke(0);
@@ -93,7 +95,7 @@ function PayGapByJob2017() {
 		}
 	};
 
-	this.addAxes = function () {
+	this.addAxes = function() {
 		stroke(200);
 
 		// Add vertical line.

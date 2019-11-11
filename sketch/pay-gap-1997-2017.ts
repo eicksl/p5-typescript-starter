@@ -1,4 +1,4 @@
-function PayGapTimeSeries() {
+function PayGapTimeSeries(this: any) {
 	// Name for the visualisation to appear in the menu bar.
 	this.name = 'Pay gap: 1997-2017';
 
@@ -13,12 +13,12 @@ function PayGapTimeSeries() {
 	this.xAxisLabel = 'year';
 	this.yAxisLabel = '%';
 
-	var marginSize = 35;
+	const marginSize = 35;
 
 	// Layout object to store all common plot layout parameters and
 	// methods.
 	this.layout = {
-		marginSize: marginSize,
+		marginSize,
 
 		// Locations of margin positions. Left and bottom have double margin
 		// size due to axis and tick labels.
@@ -28,11 +28,11 @@ function PayGapTimeSeries() {
 		bottomMargin: height - marginSize * 2,
 		pad: 5,
 
-		plotWidth: function() {
+		plotWidth() {
 			return this.rightMargin - this.leftMargin;
 		},
 
-		plotHeight: function() {
+		plotHeight() {
 			return this.bottomMargin - this.topMargin;
 		},
 
@@ -51,12 +51,12 @@ function PayGapTimeSeries() {
 	// Preload the data. This function is called automatically by the
 	// gallery when a visualisation is added.
 	this.preload = function() {
-		var self = this;
+		const self = this;
 		this.data = loadTable(
 			// @ts-ignore
 			'./data/pay-gap/all-employees-hourly-pay-by-gender-1997-2017.csv', 'csv', 'header',
 			// Callback function to set the value this.loaded to true.
-			function(table) {
+			() => {
 				self.loaded = true;
 			}
 		);
@@ -75,7 +75,8 @@ function PayGapTimeSeries() {
 		this.maxPayGap = max(this.data.getColumn('pay_gap'));
 	};
 
-	this.destroy = function() {
+	this.destroy = () => {
+		// not implemented
 	};
 
 	this.draw = function() {
@@ -104,44 +105,44 @@ function PayGapTimeSeries() {
 
 		// Plot all pay gaps between startYear and endYear using the width
 		// of the canvas minus margins.
-		var previous;
-		var numYears = this.endYear - this.startYear;
+		let previous;
+		const numYears = this.endYear - this.startYear;
 
 		// Loop over all rows and draw a line from the previous value to
 		// the current.
-		for (var i = 0; i < this.data.getRowCount(); i++) {
+		for (let i = 0; i < this.data.getRowCount(); i++) {
 
-		// Create an object to store data for the current year.
-		var current = {
-			// Convert strings to numbers.
-			'year': this.data.getNum(i, 'year'),
-			'payGap': this.data.getNum(i, 'pay_gap')
-		};
+			// Create an object to store data for the current year.
+			const current = {
+				// Convert strings to numbers.
+				year: this.data.getNum(i, 'year'),
+				payGap: this.data.getNum(i, 'pay_gap')
+			};
 
-		if (previous != null) {
-			// Draw line segment connecting previous year to current
-			// year pay gap.
-			stroke(0);
-			line(this.mapYearToWidth(previous.year),
-				this.mapPayGapToHeight(previous.payGap),
-				this.mapYearToWidth(current.year),
-				this.mapPayGapToHeight(current.payGap));
+			if (previous != null) {
+				// Draw line segment connecting previous year to current
+				// year pay gap.
+				stroke(0);
+				line(this.mapYearToWidth(previous.year),
+					this.mapPayGapToHeight(previous.payGap),
+					this.mapYearToWidth(current.year),
+					this.mapPayGapToHeight(current.payGap));
 
-			// The number of x-axis labels to skip so that only
-			// numXTickLabels are drawn.
-			var xLabelSkip = ceil(numYears / this.layout.numXTickLabels);
+				// The number of x-axis labels to skip so that only
+				// numXTickLabels are drawn.
+				const xLabelSkip = ceil(numYears / this.layout.numXTickLabels);
 
-			// Draw the tick label marking the start of the previous year.
-			if (i % xLabelSkip == 0) {
-			drawXAxisTickLabel(previous.year, this.layout,
-								this.mapYearToWidth.bind(this));
+				// Draw the tick label marking the start of the previous year.
+				if (i % xLabelSkip === 0) {
+					drawXAxisTickLabel(previous.year, this.layout,
+						this.mapYearToWidth.bind(this));
+				}
 			}
-		}
 
-		// Assign current year to previous year so that it is available
-		// during the next iteration of this loop to give us the start
-		// position of the next line segment.
-		previous = current;
+			// Assign current year to previous year so that it is available
+			// during the next iteration of this loop to give us the start
+			// position of the next line segment.
+			previous = current;
 		}
 	};
 
@@ -155,7 +156,7 @@ function PayGapTimeSeries() {
 			this.layout.topMargin - (this.layout.marginSize / 2));
 	};
 
-	this.mapYearToWidth = function(value) {
+	this.mapYearToWidth = function(value: number) {
 		return map(value,
 				this.startYear,
 				this.endYear,
@@ -163,7 +164,7 @@ function PayGapTimeSeries() {
 				this.layout.rightMargin);
 	};
 
-	this.mapPayGapToHeight = function(value) {
+	this.mapPayGapToHeight = function(value: number) {
 		return map(value,
 				this.minPayGap,
 				this.maxPayGap,

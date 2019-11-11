@@ -1,4 +1,4 @@
-function ClimateChange() {
+function ClimateChange(this: any) {
     // Name for the visualisation to appear in the menu bar.
     this.name = 'Climate Change';
 
@@ -10,12 +10,12 @@ function ClimateChange() {
     this.xAxisLabel = 'year';
     this.yAxisLabel = '℃';
 
-    var marginSize = 35;
+    const marginSize = 35;
 
     // Layout object to store all common plot layout parameters and
     // methods.
     this.layout = {
-		marginSize: marginSize,
+    	marginSize,
 
 		// Locations of margin positions. Left and bottom have double margin
 		// size due to axis and tick labels.
@@ -25,11 +25,11 @@ function ClimateChange() {
 		bottomMargin: height - marginSize * 2,
 		pad: 5,
 
-		plotWidth: function() {
+		plotWidth() {
 			return this.rightMargin - this.leftMargin;
 		},
 
-		plotHeight: function() {
+		plotHeight() {
 			return this.bottomMargin - this.topMargin;
 		},
 
@@ -48,13 +48,13 @@ function ClimateChange() {
     // Preload the data. This function is called automatically by the
     // gallery when a visualisation is added.
     this.preload = function() {
-		var self = this;
+		const self = this;
 		this.data = loadTable(
 			// @ts-ignore
 			'./data/surface-temperature/surface-temperature.csv', 'csv', 'header',
 			// Callback function to set the value
 			// this.loaded to true.
-			function(table) {
+			() => {
 				self.loaded = true;
 			}
 		);
@@ -144,21 +144,21 @@ function ClimateChange() {
 
 		// Plot all temperatures between startYear and endYear using the
 		// width of the canvas minus margins.
-		var previous;
-		var numYears = this.endYear - this.startYear;
-		var segmentWidth = this.layout.plotWidth() / numYears;
+		let previous;
+		const numYears = this.endYear - this.startYear;
+		const segmentWidth = this.layout.plotWidth() / numYears;
 
 		// Count the number of years plotted each frame to create
 		// animation effect.
-		var yearCount = 0;
+		let yearCount = 0;
 
 		// Loop over all rows but only plot those in range.
-		for (var i = 0; i < this.data.getRowCount(); i++) {
+		for (let i = 0; i < this.data.getRowCount(); i++) {
 			// Create an object to store data for the current year.
-			var current = {
+			const current = {
 				// Convert strings to numbers.
-				'year': this.data.getNum(i, 'year'),
-				'temperature': this.data.getNum(i, 'temperature')
+				year: this.data.getNum(i, 'year'),
+				temperature: this.data.getNum(i, 'temperature')
 			};
 
 			if (previous != null
@@ -188,10 +188,10 @@ function ClimateChange() {
 
 			// The number of x-axis labels to skip so that only
 			// numXTickLabels are drawn.
-			var xLabelSkip = ceil(numYears / this.layout.numXTickLabels);
+			const xLabelSkip = ceil(numYears / this.layout.numXTickLabels);
 
 			// Draw the tick label marking the start of the previous year.
-			if (yearCount % xLabelSkip == 0) {
+			if (yearCount % xLabelSkip === 0) {
 				drawXAxisTickLabel(
 					previous.year, this.layout,
 					this.mapYearToWidth.bind(this)
@@ -201,7 +201,7 @@ function ClimateChange() {
 			// When six or fewer years are displayed also draw the final
 			// year x tick label.
 			if ((numYears <= 6
-				&& yearCount == numYears - 1)) {
+				&& yearCount === numYears - 1)) {
 				drawXAxisTickLabel(
 					current.year, this.layout,
 					this.mapYearToWidth.bind(this)
@@ -231,11 +231,11 @@ function ClimateChange() {
 
 		// Stop animation when all years have been drawn.
 		if (this.frameCount >= numYears) {
-			//noLoop();
+			// noLoop();
 		}
     };
 
-    this.mapYearToWidth = function(value) {
+    this.mapYearToWidth = function(value: number) {
 		return map(
 			value,
 			this.startYear,
@@ -245,7 +245,7 @@ function ClimateChange() {
 		);
     };
 
-    this.mapTemperatureToHeight = function(value) {
+    this.mapTemperatureToHeight = function(value: number) {
 		return map(
 			value,
 			this.minTemperature,
@@ -255,15 +255,15 @@ function ClimateChange() {
 		);
     };
 
-    this.mapTemperatureToColour = function(value) {
-		var red = map(
+    this.mapTemperatureToColour = function(value: number) {
+		const red = map(
 			value,
 			this.minTemperature,
 			this.maxTemperature,
 			0,
 			255
 		);
-		var blue = 255 - red;
+		const blue = 255 - red;
 		return color(red, 0, blue, 100);
     };
 }

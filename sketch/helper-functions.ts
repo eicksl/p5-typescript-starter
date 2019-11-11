@@ -1,8 +1,8 @@
 // --------------------------------------------------------------------
 // Data processing helper functions.
 // --------------------------------------------------------------------
-function sum(data) {
-    var total = 0;
+function sum(data: any[]) {
+    let total = 0;
 
     // Ensure that data contains numbers and not strings.
     data = stringsToNumbers(data);
@@ -14,14 +14,14 @@ function sum(data) {
     return total;
 }
 
-function mean(data) {
-    var total = sum(data);
+function mean(data: any[]) {
+    const total = sum(data);
 
     return total / data.length;
 }
 
-function sliceRowNumbers(row, start=0, end) {
-    var rowData = [];
+function sliceRowNumbers(row: { arr: any[]; getNum: (arg0: number) => any; }, start = 0, end: number) {
+    const rowData = [];
 
     if (!end) {
         // Parse all values until the end of the row.
@@ -35,7 +35,7 @@ function sliceRowNumbers(row, start=0, end) {
     return rowData;
 }
 
-function stringsToNumbers(array) {
+function stringsToNumbers(array: any[]) {
     return array.map(Number);
 }
 
@@ -43,7 +43,9 @@ function stringsToNumbers(array) {
 // Plotting helper functions
 // --------------------------------------------------------------------
 
-function drawAxis(layout, colour=0) {
+function drawAxis(
+		layout: { leftMargin: number; bottomMargin: number; rightMargin: number; topMargin: number; }, colour = 0) {
+
     stroke(color(colour));
 
     // x-axis
@@ -63,7 +65,10 @@ function drawAxis(layout, colour=0) {
     );
 }
 
-function drawAxisLabels(xLabel, yLabel, layout) {
+function drawAxisLabels(
+		xLabel: string, yLabel: string, layout: { plotWidth: () => number; leftMargin: number;
+		bottomMargin: number; marginSize: number; }) {
+
 	fill(0);
 	noStroke();
 	textAlign('center', 'center');
@@ -85,10 +90,13 @@ function drawAxisLabels(xLabel, yLabel, layout) {
 	pop();
 }
 
-function drawYAxisTickLabels(min, max, layout, mapFunction, decimalPlaces) {
+function drawYAxisTickLabels(
+		min: number, max: number, layout: { numYTickLabels: number; leftMargin: number; pad: number; grid: any;
+		rightMargin: number; }, mapFunction: (arg0: number) => any, decimalPlaces: number | undefined
+	) {
 	// Map function must be passed with .bind(this).
-	var range = max - min;
-	var yTickStep = range / layout.numYTickLabels;
+	const range = max - min;
+	const yTickStep = range / layout.numYTickLabels;
 
 	fill(0);
 	noStroke();
@@ -96,8 +104,8 @@ function drawYAxisTickLabels(min, max, layout, mapFunction, decimalPlaces) {
 
 	// Draw all axis tick labels and grid lines.
 	for (let i = 0; i <= layout.numYTickLabels; i++) {
-		var value = min + (i * yTickStep);
-		var y = mapFunction(value);
+		const value = min + (i * yTickStep);
+		const y = mapFunction(value);
 
 		// Add tick label.
 		text(
@@ -113,9 +121,12 @@ function drawYAxisTickLabels(min, max, layout, mapFunction, decimalPlaces) {
 	}
 }
 
-function drawXAxisTickLabel(value, layout, mapFunction) {
+function drawXAxisTickLabel(
+		value: string | number, layout: { bottomMargin: number; marginSize: number; grid: any;
+		topMargin: number; }, mapFunction: (arg0: any) => any) {
+
 	// Map function must be passed with .bind(this).
-	var x = mapFunction(value);
+	const x = mapFunction(value);
 
 	fill(0);
 	noStroke();

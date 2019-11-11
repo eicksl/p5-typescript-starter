@@ -44,7 +44,7 @@ function ClimateChange() {
         './data/surface-temperature/surface-temperature.csv', 'csv', 'header', 
         // Callback function to set the value
         // this.loaded to true.
-        function (table) {
+        function () {
             self.loaded = true;
         });
     };
@@ -108,8 +108,8 @@ function ClimateChange() {
             // Create an object to store data for the current year.
             var current = {
                 // Convert strings to numbers.
-                'year': this.data.getNum(i, 'year'),
-                'temperature': this.data.getNum(i, 'temperature')
+                year: this.data.getNum(i, 'year'),
+                temperature: this.data.getNum(i, 'temperature')
             };
             if (previous != null
                 && current.year > this.startYear
@@ -127,13 +127,13 @@ function ClimateChange() {
                 // numXTickLabels are drawn.
                 var xLabelSkip = ceil(numYears / this.layout.numXTickLabels);
                 // Draw the tick label marking the start of the previous year.
-                if (yearCount % xLabelSkip == 0) {
+                if (yearCount % xLabelSkip === 0) {
                     drawXAxisTickLabel(previous.year, this.layout, this.mapYearToWidth.bind(this));
                 }
                 // When six or fewer years are displayed also draw the final
                 // year x tick label.
                 if ((numYears <= 6
-                    && yearCount == numYears - 1)) {
+                    && yearCount === numYears - 1)) {
                     drawXAxisTickLabel(current.year, this.layout, this.mapYearToWidth.bind(this));
                 }
                 yearCount++;
@@ -155,7 +155,7 @@ function ClimateChange() {
         this.frameCount++;
         // Stop animation when all years have been drawn.
         if (this.frameCount >= numYears) {
-            //noLoop();
+            // noLoop();
         }
     };
     this.mapYearToWidth = function (value) {
@@ -180,8 +180,7 @@ function Gallery() {
     // Add a new visualisation to the navigation bar.
     this.addVisual = function (vis) {
         // Check that the vis object has an id and name.
-        if (!vis.hasOwnProperty('id')
-            && !vis.hasOwnProperty('name')) {
+        if (!vis.hasOwnProperty('id') && !vis.hasOwnProperty('name')) {
             alert('Make sure your visualisation has an id and name!');
         }
         // Check that the vis object has a unique id.
@@ -194,22 +193,21 @@ function Gallery() {
         menuItem.addClass('menu-item');
         menuItem.id(vis.id);
         menuItem.mouseOver(function (e) {
-            var el = select('#' + e.srcElement.id);
-            el.addClass("hover");
+            var el = select('#' + e.target.id);
+            el.addClass('hover');
         });
         menuItem.mouseOut(function (e) {
-            var el = select('#' + e.srcElement.id);
-            el.removeClass("hover");
+            var el = select('#' + e.target.id);
+            el.removeClass('hover');
         });
         menuItem.mouseClicked(function (e) {
-            //remove selected class from any other menu-items
-            var menuItems = selectAll('.menu-item');
+            var menuItems = selectAll('.menu-item'); // remove selected class from any other menu-items
             for (var i = 0; i < menuItems.length; i++) {
                 menuItems[i].removeClass('selected');
             }
-            var el = select('#' + e.srcElement.id);
+            var el = select('#' + e.target.id);
             el.addClass('selected');
-            self.selectVisual(e.srcElement.id);
+            self.selectVisual(e.target.id);
         });
         var visMenu = select('#visuals-menu');
         visMenu.child(menuItem);
@@ -222,7 +220,7 @@ function Gallery() {
         // Search through the visualisations looking for one with the id
         // matching visId.
         for (var i = 0; i < this.visuals.length; i++) {
-            if (this.visuals[i].id == visId) {
+            if (this.visuals[i].id === visId) {
                 return i;
             }
         }
@@ -384,7 +382,7 @@ function PayGapTimeSeries() {
         // @ts-ignore
         './data/pay-gap/all-employees-hourly-pay-by-gender-1997-2017.csv', 'csv', 'header', 
         // Callback function to set the value this.loaded to true.
-        function (table) {
+        function () {
             self.loaded = true;
         });
     };
@@ -399,6 +397,7 @@ function PayGapTimeSeries() {
         this.maxPayGap = max(this.data.getColumn('pay_gap'));
     };
     this.destroy = function () {
+        // not implemented
     };
     this.draw = function () {
         if (!this.loaded) {
@@ -423,8 +422,8 @@ function PayGapTimeSeries() {
             // Create an object to store data for the current year.
             var current = {
                 // Convert strings to numbers.
-                'year': this.data.getNum(i, 'year'),
-                'payGap': this.data.getNum(i, 'pay_gap')
+                year: this.data.getNum(i, 'year'),
+                payGap: this.data.getNum(i, 'pay_gap')
             };
             if (previous != null) {
                 // Draw line segment connecting previous year to current
@@ -435,7 +434,7 @@ function PayGapTimeSeries() {
                 // numXTickLabels are drawn.
                 var xLabelSkip = ceil(numYears / this.layout.numXTickLabels);
                 // Draw the tick label marking the start of the previous year.
-                if (i % xLabelSkip == 0) {
+                if (i % xLabelSkip === 0) {
                     drawXAxisTickLabel(previous.year, this.layout, this.mapYearToWidth.bind(this));
                 }
             }
@@ -481,13 +480,15 @@ function PayGapByJob2017() {
         './data/pay-gap/occupation-hourly-pay-by-gender-2017.csv', 'csv', 'header', 
         // Callback function to set the value
         // this.loaded to true.
-        function (table) {
+        function () {
             self.loaded = true;
         });
     };
     this.setup = function () {
+        // not implemented
     };
     this.destroy = function () {
+        // not implemented
     };
     this.draw = function () {
         if (!this.loaded) {
@@ -557,10 +558,10 @@ function PieChart(x, y, diameter) {
         console.log(colours);
         // Test that data is not empty and that each input array is the
         // same length.
-        if (data.length == 0) {
+        if (data.length === 0) {
             alert('Data has length zero!');
         }
-        else if (![labels, colours].every(function (array) { return array.length == data.length; })) {
+        else if (![labels, colours].every(function (array) { return array.length === data.length; })) {
             alert("Data (length: " + data.length + ")\n\t\t\t\tLabels (length: " + labels.length + ")\n\t\t\t\tColours (length: " + colours.length + ")\n\t\t\t\tArrays must be the same length!");
         }
         // https://p5js.org/examples/form-pie-chart.html
@@ -574,6 +575,7 @@ function PieChart(x, y, diameter) {
             else {
                 colour = map(i, 0, data.length, 0, 255);
             }
+            // @ts-ignore
             fill(colour);
             stroke(0);
             strokeWeight(1);
@@ -648,7 +650,7 @@ function TechDiversityGender() {
         // Number of axis tick labels to draw so that they are not drawn on
         // top of one another.
         numXTickLabels: 10,
-        numYTickLabels: 8,
+        numYTickLabels: 8
     };
     // Middle of the plot: for 50% line.
     this.midX = (this.layout.plotWidth() / 2) + this.layout.leftMargin;
@@ -666,7 +668,7 @@ function TechDiversityGender() {
         './data/tech-diversity/gender-2018.csv', 'csv', 'header', 
         // Callback function to set the value
         // this.loaded to true.
-        function (table) {
+        function () {
             self.loaded = true;
         });
     };
@@ -675,6 +677,7 @@ function TechDiversityGender() {
         textSize(16);
     };
     this.destroy = function () {
+        // not implemented
     };
     this.draw = function () {
         if (!this.loaded) {
@@ -683,17 +686,16 @@ function TechDiversityGender() {
         }
         // Draw Female/Male labels at the top of the plot.
         this.drawCategoryLabels();
-        var lineHeight = (height - this.layout.topMargin) /
-            this.data.getRowCount();
+        var lineHeight = (height - this.layout.topMargin) / this.data.getRowCount();
         for (var i = 0; i < this.data.getRowCount(); i++) {
             // Calculate the y position for each company.
             var lineY = (lineHeight * i) + this.layout.topMargin;
             // Create an object that stores data from the current row.
             var company = {
                 // Convert strings to numbers.
-                'name': this.data.getString(i, 'company'),
-                'female': this.data.getNum(i, 'female'),
-                'male': this.data.getNum(i, 'male'),
+                name: this.data.getString(i, 'company'),
+                female: this.data.getNum(i, 'female'),
+                male: this.data.getNum(i, 'male')
             };
             // Draw the company name in the left margin.
             fill(0);
@@ -743,7 +745,7 @@ function TechDiversityRace() {
         './data/tech-diversity/race-2018.csv', 'csv', 'header', 
         // Callback function to set the value
         // this.loaded to true.
-        function (table) {
+        function () {
             self.loaded = true;
         });
     };
